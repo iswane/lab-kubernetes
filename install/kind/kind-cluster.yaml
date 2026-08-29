@@ -1,0 +1,27 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  # Le Nœud Master (Control Plane)
+  - role: control-plane
+    image: kindest/node:v1.29.2 # <-- VERSION UNIFIÉE
+    kubeadmConfigPatches:
+      - |
+        kind: InitConfiguration
+        nodeRegistration:
+          kubeletExtraArgs:
+            node-labels: "ingress-ready=true"
+    extraPortMappings:
+      - containerPort: 80
+        hostPort: 80
+        protocol: TCP
+      - containerPort: 443
+        hostPort: 443
+        protocol: TCP
+
+  # Les 3 Nœuds Workers (ILS VONT UTILISER LA MÊME IMAGE PAR DÉFAUT/OU ON LA SPÉCIFIE)
+  - role: worker
+    image: kindest/node:v1.29.2 # <-- AJOUTE/VÉRIFIE CETTE LIGNE
+  - role: worker
+    image: kindest/node:v1.29.2 # <-- AJOUTE/VÉRIFIE CETTE LIGNE
+  - role: worker
+    image: kindest/node:v1.29.2 # <-- AJOUTE/VÉRIFIE CETTE LIGNE

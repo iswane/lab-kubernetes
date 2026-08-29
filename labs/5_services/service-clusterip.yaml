@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webservice
+spec:
+  sessionAffinity: ClientIP
+  selector:
+    app: generatorsvc
+  ports:
+    - name: http
+      port: 81
+      targetPort: 80
+    - name: ssh
+      port: 22
+      targetPort: 22
+
+
+#  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@10.96.7.150

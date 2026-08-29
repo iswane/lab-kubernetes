@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-nodeport
+spec:
+  type: NodePort
+  selector:
+    app: generatorsvc
+  ports:
+    - port: 81
+      targetPort: 80
+      nodePort: 30080
+
+
+#  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@10.96.7.150

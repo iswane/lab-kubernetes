@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: fortune
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fortune
+  template:
+    metadata:
+      labels:
+        app: fortune
+    spec:
+      containers:
+        - name: web
+          image: rg.fr-par.scw.cloud/ilkilabs/webapache:v1
+          ports:
+            - containerPort: 80
+            - containerPort: 22
+        - name: generator
+          image: rg.fr-par.scw.cloud/ilkilabs/chuckgen:v2

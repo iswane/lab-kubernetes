@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: foo-html
+data:
+  index.html: foo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bar-html
+data:
+  index.html: bar
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: foo-app
+  labels:
+    app: http-echo
+spec:
+  containers:
+    - name: foo-app
+      image: busybox:1.36
+      command: ["httpd", "-f", "-p", "5678", "-h", "/www"]
+      volumeMounts:
+        - name: html
+          mountPath: /www
+  volumes:
+    - name: html
+      configMap:
+        name: foo-html
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bar-app
+  labels:
+    app: http-echo
+spec:
+  containers:
+    - name: bar-app
+      image: busybox:1.36
+      command: ["httpd", "-f", "-p", "5678", "-h", "/www"]
+      volumeMounts:
+        - name: html
+          mountPath: /www
+  volumes:
+    - name: html
+      configMap:
+        name: bar-html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: foo-bar-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: http-echo
+  ports:
+    - port: 5678
